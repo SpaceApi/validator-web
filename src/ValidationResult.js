@@ -73,14 +73,47 @@ function ValidationResult(props) {
 
     return (
         <List>
-            {props.result.reachable === false &&
+            {(props.result.httpStatus === 0 && props.result.reachable === false) &&
                 <StyledListItem type={'error'}>
                     <ListItemIcon>
                         <ErrorIcon />
                     </ListItemIcon>
                     <ListItemText
-                        primary={"The provided URL is not reachable"}
+                        primary={"The provided URL is not reachable."}
                         secondary={"Check your server something is wrong."}
+                    />
+                </StyledListItem>
+            }
+            {(props.result.httpStatus !== 0 && props.result.reachable === false) &&
+                <StyledListItem type={'error'}>
+                    <ListItemIcon>
+                        <ErrorIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"The provided URL is reachable, but returns HTTP status code " + props.result.httpStatus}
+                        secondary={"Check your server something is wrong."}
+                    />
+                </StyledListItem>
+            }
+            {(props.result.reachable === true && props.result.reachableIPv6 === false) &&
+                <StyledListItem type={'warning'}>
+                    <ListItemIcon>
+                        <ErrorIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"The provided URL is not reachable via IPv6"}
+                        secondary={"We recommend to provide a dual-stack endpoint (both IPv6 and IPv4) for best interoperability with all clients."}
+                    />
+                </StyledListItem>
+            }
+            {(props.result.reachable === true && props.result.reachableIPv4 === false) &&
+                <StyledListItem type={'warning'}>
+                    <ListItemIcon>
+                        <ErrorIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"The provided URL is not reachable via IPv4"}
+                        secondary={"We recommend to provide a dual-stack endpoint (both IPv6 and IPv4) for best interoperability with all clients."}
                     />
                 </StyledListItem>
             }
